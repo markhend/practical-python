@@ -22,4 +22,4 @@ while principal > 0:
         principal = principal * (1+rate/12) - payment
         total_paid = total_paid + payment
 
-    print(month, round(total_paid, 2), round(principal, 2))
+    print(f"{month:3} {total_paid:10.2f} {principal:9.2f}")
