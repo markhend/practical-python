@@ -17,9 +17,29 @@ def read_portfolio(filename):
     return portfolio
 
 portfolio = read_portfolio('Data/portfolio.csv')
-pprint(portfolio)
+# pprint(portfolio)
 total = 0.0
 for s in portfolio:
     # print(s)
     total += s['shares'] * s['price']
-print(total)
+print(f"portfolio total cost basis ${total}")
+print()
+
+def read_prices(filename):
+    prices = {}
+    with open(filename, 'r') as f:
+        rows = csv.reader(f)
+        for row in rows:
+            try:
+                stock, price = row
+                prices[stock] = float(price)
+            except ValueError:
+                # print("missing data...skipping row")
+                continue
+    return(prices)
+
+prices = read_prices('Data/prices.csv')
+# pprint(prices)
+
+for holding in portfolio:
+    print(prices[holding['name']])
