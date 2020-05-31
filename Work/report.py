@@ -4,6 +4,7 @@
 import csv
 from pprint import pprint
 
+
 def read_portfolio(filename):
     '''Computes the total cost (shares*price) of a portfolio file'''
     portfolio = []
@@ -12,18 +13,21 @@ def read_portfolio(filename):
         rows = csv.reader(f)
         headers = next(rows)
         for row in rows:
-            holding = {'name':row[0], 'shares':int(row[1]), 'price':float(row[2])}
+            holding = {'name': row[0], 'shares': int(
+                row[1]), 'price': float(row[2])}
             portfolio.append(holding)
     return portfolio
 
+
 portfolio = read_portfolio('Data/portfolio.csv')
-# pprint(portfolio)
-total = 0.0
+pprint(portfolio)
+total_cost = 0.0
 for s in portfolio:
     # print(s)
-    total += s['shares'] * s['price']
-print(f"portfolio total cost basis ${total}")
+    total_cost += s['shares'] * s['price']
+print(f"portfolio total cost basis {total_cost}")
 print()
+
 
 def read_prices(filename):
     prices = {}
@@ -38,8 +42,11 @@ def read_prices(filename):
                 continue
     return(prices)
 
-prices = read_prices('Data/prices.csv')
-# pprint(prices)
 
+current_prices = read_prices('Data/prices.csv')
+# pprint(current_prices)
+
+total_value = 0.0
 for holding in portfolio:
-    print(prices[holding['name']])
+    total_value += (current_prices[holding['name']] - holding['price']) * holding['shares']
+print(f"portolio gain/loss {total_value:0.2f}")
