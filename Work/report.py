@@ -1,6 +1,6 @@
 # report.py
 #
-# Exercise 2.4 - 2.7
+# Exercise 2.4 - 2.9
 import csv
 from pprint import pprint
 
@@ -48,5 +48,18 @@ current_prices = read_prices('Data/prices.csv')
 
 total_value = 0.0
 for holding in portfolio:
-    total_value += (current_prices[holding['name']] - holding['price']) * holding['shares']
+    total_value += (current_prices[holding['name']] -
+                    holding['price']) * holding['shares']
 print(f"portolio gain/loss {total_value:0.2f}")
+
+
+def make_report(portfolio, prices):
+    report = []
+    for s in portfolio: # s = stock
+        price_change = prices[s['name']] - s['price']
+        report.append((s['name'], s['shares'], prices[s['name']], price_change))
+    return report
+
+report = make_report(portfolio, current_prices)
+for r in report:
+    print(r)
