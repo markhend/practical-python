@@ -1,6 +1,6 @@
 # report.py
 #
-# Exercise 2.4
+# Exercise 2.4 - 2.7
 import csv
 from pprint import pprint
 
