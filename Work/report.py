@@ -1,6 +1,3 @@
-# report.py
-#
-# Exercise 2.4 - 2.9
 import csv
 from pprint import pprint
 
@@ -8,19 +5,25 @@ from pprint import pprint
 def read_portfolio(filename):
     '''Computes the total cost (shares*price) of a portfolio file'''
     portfolio = []
-
-    with open(filename, 'rt') as f:
+    with open(filename) as f:
         rows = csv.reader(f)
         headers = next(rows)
+
         for row in rows:
-            holding = {'name': row[0], 'shares': int(
-                row[1]), 'price': float(row[2])}
-            portfolio.append(holding)
+            record = dict(zip(headers, row))
+            stock = {
+                 'name'   : record['name'],
+                 'shares' : int(record['shares']),
+                 'price'   : float(record['price'])
+            }
+            portfolio.append(stock)
+
     return portfolio
 
 
-portfolio = read_portfolio('Data/portfolio.csv')
-pprint(portfolio)
+# portfolio = read_portfolio('Data/portfolio.csv')
+portfolio = read_portfolio('Data/portfoliodate.csv')
+# pprint(portfolio)
 total_cost = 0.0
 for s in portfolio:
     # print(s)
@@ -50,16 +53,24 @@ total_value = 0.0
 for holding in portfolio:
     total_value += (current_prices[holding['name']] -
                     holding['price']) * holding['shares']
-print(f"portolio gain/loss {total_value:0.2f}")
+print(f"portolio gain/loss {total_value:0.2f}\n")
 
 
 def make_report(portfolio, prices):
     report = []
-    for s in portfolio: # s = stock
+    for s in portfolio:  # s = stock
         price_change = prices[s['name']] - s['price']
-        report.append((s['name'], s['shares'], prices[s['name']], price_change))
+        report.append(
+            (s['name'], s['shares'], prices[s['name']], price_change))
     return report
 
+
 report = make_report(portfolio, current_prices)
+print('%10s %10s %10s %10s' % ('Name', 'Shares', 'Price', 'Change'))
+seps = ('-'*10)
+print('%10s %10s %10s %10s' % (seps, seps, seps, seps))
 for r in report:
-    print(r)
+    print('%10s %10d %10s %10.2f' % (r[0], r[1], '$'+str(r[2]), r[3]))
+print()
+# for name, shares, price, change in report:
+#     print(f'{name:>10s} {shares:>10d} {price:>10.2f} {change:>10.2f}')
