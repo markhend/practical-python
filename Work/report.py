@@ -85,8 +85,15 @@ def portfolio_report(portfolio_filename, prices_filename):
     print_report(report)
 
 
-files = ['Data/portfolio.csv', 'Data/portfolio2.csv']
-for name in files:
-    print(f'{name:-^43s}')
-    portfolio_report(name, 'Data/prices.csv')
-    print()
+def main(argv):
+    files = argv[1:-1]
+    for name in files:
+        print(f'{name:-^43s}')
+        portfolio_report(name, 'Data/prices.csv')
+        print()
+
+
+if __name__ == '__main__':
+    # files = ['Data/portfolio.csv', 'Data/portfolio2.csv']
+    import sys
+    main(sys.argv)
