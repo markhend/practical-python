@@ -1,19 +1,19 @@
 # pcost.py
 
+import report
 
 def portfolio_cost(filename):
-    with open(filename, 'rt') as f:
-        headers = next(f)
-        cost = 0
-        for rowno, row in enumerate(f, start=1):
-            row = row.split(',')
-            try:
-                cost += int(row[1]) * float(row[2])
-            except ValueError:
-                print(f"Row {rowno}: Couldn't convert: {row}")
-                continue
-        return cost
+    '''
+    Computes the total cost (shares*price) of a portfolio file
+    '''
+    portfolio = report.read_portfolio(filename)
+    return sum([s['shares']*s['price'] for s in portfolio])
 
+import sys
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
+else:
+    filename = input('Enter a filename:')
 
-cost = portfolio_cost('Data/missing.csv')
-print("Total cost", cost)
+cost = portfolio_cost(filename)
+print('Total cost:', cost)

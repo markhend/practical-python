@@ -1,22 +1,25 @@
 import csv
-from pprint import pprint
+import fileparse
 
 
 def read_portfolio(filename):
-    '''Computes the total cost (shares*price) of a portfolio file'''
-    portfolio = []
-    with open(filename) as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-        for row in rows:
-            record = dict(zip(headers, row))
-            stock = {
-                'name': record['name'],
-                'shares': int(record['shares']),
-                'price': float(record['price'])
-            }
-            portfolio.append(stock)
-    return portfolio
+    '''
+    Read a stock portfolio file into a list of dictionaries with keys
+    name, shares, and price.
+    '''
+    # portfolio = []
+    # with open(filename) as f:
+    #     rows = csv.reader(f)
+    #     headers = next(rows)
+    #     for row in rows:
+    #         record = dict(zip(headers, row))
+    #         stock = {
+    #             'name': record['name'],
+    #             'shares': int(record['shares']),
+    #             'price': float(record['price'])
+    #         }
+    #         portfolio.append(stock)
+    return fileparse.parse_csv(filename, select=['name', 'shares', 'price'], types=[str, int, float])
 
 
 def portfolio_cost(portfolio):
@@ -29,21 +32,23 @@ def portfolio_cost(portfolio):
 
 
 def read_prices(filename):
-    prices = {}
-    with open(filename, 'r') as f:
-        rows = csv.reader(f)
-        for row in rows:
-            try:
-                stock, price = row
-                prices[stock] = float(price)
-            except ValueError:
-                # print("missing data...skipping row")
-                continue
-    return(prices)
+    '''
+    Read a CSV file of price data into a dict mapping names to prices.
+    '''
+    # prices = {}
+    # with open(filename, 'r') as f:
+    #     rows = csv.reader(f)
+    #     for row in rows:
+    #         try:
+    #             stock, price = row
+    #             prices[stock] = float(price)
+    #         except ValueError:
+    #             # print("missing data...skipping row")
+    #             continue
+    return dict(fileparse.parse_csv(filename, types=[str, float], has_headers=False))
 
 
 # prices = read_prices('Data/prices.csv')
-# pprint(current_prices)
 
 def portfolio_value_change(portfolio, prices):
     value = 0.0
@@ -80,7 +85,6 @@ def portfolio_report(portfolio_filename, prices_filename):
     print_report(report)
 
 
-# portfolio_report('Data/portfolio.csv', 'Data/prices.csv')
 files = ['Data/portfolio.csv', 'Data/portfolio2.csv']
 for name in files:
     print(f'{name:-^43s}')
