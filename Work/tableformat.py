@@ -59,10 +59,17 @@ class HTMLTableFormatter(TableFormatter):
         print(f'<tr>{s}</tr>')
 
 
+
+class FormatError(Exception):
+    pass
+
+
 def create_formatter(fmt):
     '''
     Create a formatter based on the fmt, e.g. 'txt', 'csv', 'html'
     '''
+    if fmt not in ['txt', 'csv', 'html']:
+        raise FormatError('Unknown table format %s' % fmt)
     if fmt == 'txt':
         formatter = TextTableFormatter()
     elif fmt == 'csv':
@@ -76,7 +83,7 @@ def create_formatter(fmt):
 
 def print_table(objects, columns, formatter):
     '''
-    portfolio contains stock objects, columns designate what to print with formatter object
+    Columns designate what to print with formatter object.
     '''
     formatter.headings(columns)
     for obj in objects:
