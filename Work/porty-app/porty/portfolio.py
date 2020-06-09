@@ -1,6 +1,6 @@
 # portfoio.py
-import fileparse
-import stock
+from . import fileparse
+from . import stock
 
 
 class Portfolio:
